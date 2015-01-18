@@ -108,7 +108,10 @@ public class Translator {
 			s1 = scanInt();
 			s2 = scanInt();
 			return new DivInstruction(label, r, s1, s2);
-		case "BNZ":
+		case "out": 
+			s1 = scanInt();
+			return new OutInstruction(label, s1);
+		case "bnz":
 			s1 = scanInt();
 			l2 = scan();
 			return new BNZInstruction(label, s1, l2);

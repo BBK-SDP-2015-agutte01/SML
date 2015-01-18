@@ -1,8 +1,5 @@
 package sml;
 
-import lombok.Getter;
-import lombok.AccessLevel;
-
 /**
  * This class is for Branch Not Zero (jump) instructions
  * 
@@ -17,33 +14,27 @@ public class BNZInstruction extends Instruction {
 
 	private int reg;
 	private String statement;
-	@Getter(AccessLevel.PACKAGE) private boolean zeroStatus;
 
 	public BNZInstruction(String label, String op) {
 		super(label, op);
 	}
 
 	public BNZInstruction(String label, int reg, String statement) {
-		this(label, "BNZ");
+		this(label, "bnz");
 		this.reg = reg;
 		this.statement = statement;
 	}
 
 	@Override
 	public void execute(Machine m) {
-		if (m.getRegisters().getRegister(reg) == 0) {
-			zeroStatus = true;
-		} else {
-			zeroStatus = false;
+		if (m.getRegisters().getRegister(reg) != 0) {
+			int newPcValue = Integer.parseInt(statement.substring(1));
+			m.setPc(newPcValue);
 		}
 	}
 
 	@Override
 	public String toString() {
-		if (zeroStatus) {
-			return super.toString() + " " + reg + " is zero, JUMP to" + statement;			
-		} else {
-			return super.toString() + " " + reg + " is not zero";
-		}
+		return super.toString() + " " + reg + "? JUMP to " + statement;			
 	}
 }

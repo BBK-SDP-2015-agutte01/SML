@@ -68,10 +68,6 @@ public class Machine {
 			Instruction ins = getProg().get(getPc());
 			setPc(getPc() + 1);
 			ins.execute(this);
-			// need to change program counter if BNZ instruction
-			// if class = BNZ then ins.getZeroStatus
-			// if zeroStatus = true then getStatement
-			// translate statement into PC number?
 		}
 	}
 }
