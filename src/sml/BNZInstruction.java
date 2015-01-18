@@ -10,16 +10,16 @@ package sml;
  * @author agutteridge
  */
 
-public class BNZInstruction extends Instruction {
+public class BnzInstruction extends Instruction {
 
 	private int reg;
 	private String statement;
 
-	public BNZInstruction(String label, String op) {
+	public BnzInstruction(String label, String op) {
 		super(label, op);
 	}
 
-	public BNZInstruction(String label, int reg, String statement) {
+	public BnzInstruction(String label, int reg, String statement) {
 		this(label, "bnz");
 		this.reg = reg;
 		this.statement = statement;
@@ -28,6 +28,7 @@ public class BNZInstruction extends Instruction {
 	@Override
 	public void execute(Machine m) {
 		if (m.getRegisters().getRegister(reg) != 0) {
+			// assumes label integers are sequential
 			int newPcValue = Integer.parseInt(statement.substring(1));
 			m.setPc(newPcValue);
 		}

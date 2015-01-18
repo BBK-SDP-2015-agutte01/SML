@@ -83,40 +83,55 @@ public class Translator {
 			return null;
 
 		String ins = scan();
-		switch (ins) {
-		case "add":
-			r = scanInt();
-			s1 = scanInt();
-			s2 = scanInt();
-			return new AddInstruction(label, r, s1, s2);
-		case "lin":
-			r = scanInt();
-			x = scanInt();
-			return new LinInstruction(label, r, x);
-		case "sub":
-			r = scanInt();
-			s1 = scanInt();
-			s2 = scanInt();
-			return new SubInstruction(label, r, s1, s2);
-		case "mul":
-			r = scanInt();
-			s1 = scanInt();
-			s2 = scanInt();
-			return new MulInstruction(label, r, s1, s2);
-		case "div":
-			r = scanInt();
-			s1 = scanInt();
-			s2 = scanInt();
-			return new DivInstruction(label, r, s1, s2);
-		case "out": 
-			s1 = scanInt();
-			return new OutInstruction(label, s1);
-		case "bnz":
-			s1 = scanInt();
-			l2 = scan();
-			return new BNZInstruction(label, s1, l2);
+		String className = ins.substring(0,1).toUpperCase() + ins.substring(1) + "Instruction";
+		
+		try {
+			Class<?> instructionClass = Class.forName(className);
+		
+			// change all constructors to take an array of integers!
+			// then all constructors will be Array[Integer]
+			// getConstructor(Object[].class)?
+			switch (ins) {
+			case "add":
+				r = scanInt();
+				s1 = scanInt();
+				s2 = scanInt();
+				return new AddInstruction(label, r, s1, s2);
+			case "lin":
+				r = scanInt();
+				x = scanInt();
+				return new LinInstruction(label, r, x);
+			case "sub":
+				r = scanInt();
+				s1 = scanInt();
+				s2 = scanInt();
+				return new SubInstruction(label, r, s1, s2);
+			case "mul":
+				r = scanInt();
+				s1 = scanInt();
+				s2 = scanInt();
+				return new MulInstruction(label, r, s1, s2);
+			case "div":
+				r = scanInt();
+				s1 = scanInt();
+				s2 = scanInt();
+				return new DivInstruction(label, r, s1, s2);
+			case "out": 
+				s1 = scanInt();
+				return new OutInstruction(label, s1);
+			case "bnz":
+				s1 = scanInt();
+				
+				// parse to int
+				l2 = scan();
+				return new BnzInstruction(label, s1, l2);
+			}
+			
+		} catch (ClassNotFoundException e) {
+			System.err.println("Corresponding Instruction class not found.");
+			e.printStackTrace();
 		}
-
+		
 		return null;
 	}
 
