@@ -86,11 +86,10 @@ public class Translator {
 		String className = ins.substring(0,1).toUpperCase() + ins.substring(1) + "Instruction";
 		
 		try {
-			Class<?> instructionClass = Class.forName(className);
+			Class<?> instructionClass = Class.forName("sml." + className);
 		
-			// change all constructors to take an array of integers!
-			// then all constructors will be Array[Integer]
-			// getConstructor(Object[].class)?
+			// change all constructors to take a String + an array of integers!
+			// getConstructor(String.class, Object[].class)?
 			switch (ins) {
 			case "add":
 				r = scanInt();
@@ -124,7 +123,9 @@ public class Translator {
 				
 				// parse to int
 				l2 = scan();
-				return new BnzInstruction(label, s1, l2);
+				int lnum = Integer.parseInt(l2.substring(1));
+				int[] argsArray = {s1, lnum};
+				return new BnzInstruction(label, argsArray);
 			}
 			
 		} catch (ClassNotFoundException e) {

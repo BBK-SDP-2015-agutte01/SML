@@ -13,24 +13,23 @@ package sml;
 public class BnzInstruction extends Instruction {
 
 	private int reg;
-	private String statement;
+	private int statement;
 
 	public BnzInstruction(String label, String op) {
 		super(label, op);
 	}
 
-	public BnzInstruction(String label, int reg, String statement) {
+	public BnzInstruction(String label, int[] intArray) {
 		this(label, "bnz");
-		this.reg = reg;
-		this.statement = statement;
+		this.reg = intArray[0];
+		this.statement = intArray[1];
 	}
 
 	@Override
 	public void execute(Machine m) {
 		if (m.getRegisters().getRegister(reg) != 0) {
 			// assumes label integers are sequential
-			int newPcValue = Integer.parseInt(statement.substring(1));
-			m.setPc(newPcValue);
+			m.setPc(statement);
 		}
 	}
 
