@@ -26,7 +26,7 @@ public class Labels {
 	// (= -1 if lab is not in the list)
 
 	public int indexOf(String lab) {
-
+		System.out.println("finding... " + lab);
 		// invariant: lab is not in labels[0..i-1]
 		for (int i = 0; i != labels.size(); i++) {
 			if (lab.equals(labels.get(i))) {

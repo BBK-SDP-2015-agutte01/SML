@@ -81,6 +81,8 @@ public class Translator {
 			return null;
 
 		String ins = scan();
+		
+		// Requires all subclasses of Instruction to follow naming convention: OpcodeInstruction
 		String className = ins.substring(0,1).toUpperCase() + ins.substring(1) + "Instruction";
 		
 		try {
@@ -90,15 +92,16 @@ public class Translator {
 			case "bnz":
 				intArray[0] = scanInt();
 
-				// parse to int
+				// parse statement to int
 				String l2 = scan();
+				System.out.println("Reading... " + l2);
 				int lnum = Integer.parseInt(l2.substring(1));
 				intArray[1] = lnum;		
 				break;
 			default:
 				intArray[0] = scanInt();
 				intArray[1] = scanInt();
-				intArray[2] = scanInt();				
+				intArray[2] = scanInt();
 			}
 
 			Constructor<?> cons = instructionClass.getConstructor(

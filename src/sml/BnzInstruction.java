@@ -27,9 +27,10 @@ public class BnzInstruction extends Instruction {
 
 	@Override
 	public void execute(Machine m) {
-		if (m.getRegisters().getRegister(reg) != 0) {
-			// assumes label integers are sequential
-			m.setPc(statement);
+		if (m.getRegisters().getRegister(reg) != 0) {			
+			Labels labelObject = m.getLabels();
+			int newPc = labelObject.indexOf("f" + statement);
+			m.setPc(newPc);
 		}
 	}
 
