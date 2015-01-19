@@ -94,7 +94,6 @@ public class Translator {
 
 				// parse statement to int
 				String l2 = scan();
-				System.out.println("Reading... " + l2);
 				int lnum = Integer.parseInt(l2.substring(1));
 				intArray[1] = lnum;		
 				break;
