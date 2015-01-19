@@ -19,7 +19,7 @@ public class BnzInstruction extends Instruction {
 		super(label, op);
 	}
 
-	public BnzInstruction(String label, int[] intArray) {
+	public BnzInstruction(String label, Integer[] intArray) {
 		this(label, "bnz");
 		this.reg = intArray[0];
 		this.statement = intArray[1];

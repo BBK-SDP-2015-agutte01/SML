@@ -17,9 +17,9 @@ public class OutInstruction extends Instruction {
 		super(label, op);
 	}
 
-	public OutInstruction(String label, int reg) {
+	public OutInstruction(String label, Integer[] intArray) {
 		this(label, "out");
-		this.reg = reg;
+		this.reg = intArray[0];
 	}
 
 	@Override

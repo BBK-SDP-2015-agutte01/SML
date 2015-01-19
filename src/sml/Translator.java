@@ -2,6 +2,8 @@ package sml;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -73,11 +75,7 @@ public class Translator {
 	// removed. Translate line into an instruction with label label
 	// and return the instruction
 	public Instruction getInstruction(String label) {
-		int s1; // Possible operands of the instruction
-		int s2;
-		int r;
-		int x;
-		String l2;
+		Integer[] intArray = new Integer[3];
 
 		if (line.equals(""))
 			return null;
@@ -88,48 +86,29 @@ public class Translator {
 		try {
 			Class<?> instructionClass = Class.forName("sml." + className);
 		
-			// change all constructors to take a String + an array of integers!
-			// getConstructor(String.class, Object[].class)?
-			switch (ins) {
-			case "add":
-				r = scanInt();
-				s1 = scanInt();
-				s2 = scanInt();
-				return new AddInstruction(label, r, s1, s2);
-			case "lin":
-				r = scanInt();
-				x = scanInt();
-				return new LinInstruction(label, r, x);
-			case "sub":
-				r = scanInt();
-				s1 = scanInt();
-				s2 = scanInt();
-				return new SubInstruction(label, r, s1, s2);
-			case "mul":
-				r = scanInt();
-				s1 = scanInt();
-				s2 = scanInt();
-				return new MulInstruction(label, r, s1, s2);
-			case "div":
-				r = scanInt();
-				s1 = scanInt();
-				s2 = scanInt();
-				return new DivInstruction(label, r, s1, s2);
-			case "out": 
-				s1 = scanInt();
-				return new OutInstruction(label, s1);
+			switch (ins) {			
 			case "bnz":
-				s1 = scanInt();
-				
+				intArray[0] = scanInt();
+
 				// parse to int
-				l2 = scan();
+				String l2 = scan();
 				int lnum = Integer.parseInt(l2.substring(1));
-				int[] argsArray = {s1, lnum};
-				return new BnzInstruction(label, argsArray);
+				intArray[1] = lnum;		
+				break;
+			default:
+				intArray[0] = scanInt();
+				intArray[1] = scanInt();
+				intArray[2] = scanInt();				
 			}
+
+			Constructor<?> cons = instructionClass.getConstructor(
+					new Class<?>[] {String.class, Integer[].class});
+			Object instruction = cons.newInstance(new Object[]{ins, intArray});
+			return (Instruction) instruction;
 			
-		} catch (ClassNotFoundException e) {
-			System.err.println("Corresponding Instruction class not found.");
+		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | 
+				InstantiationException | IllegalAccessException | IllegalArgumentException | 
+				InvocationTargetException e) {
 			e.printStackTrace();
 		}
 		

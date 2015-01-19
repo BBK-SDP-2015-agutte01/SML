@@ -14,10 +14,10 @@ public class LinInstruction extends Instruction {
 		super(label, opcode);
 	}
 
-	public LinInstruction(String label, int register, int value) {
+	public LinInstruction(String label, Integer[] intArray) {
 		super(label, "lin");
-		this.register = register;
-		this.value = value;
+		this.register = intArray[0];
+		this.value = intArray[1];
 
 	}
 
