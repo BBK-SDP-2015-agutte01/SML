@@ -75,12 +75,22 @@ public class Translator {
 	// removed. Translate line into an instruction with label label
 	// and return the instruction
 	public Instruction getInstruction(String label) {
-		Integer[] intArray = new Integer[3];
 
 		if (line.equals(""))
 			return null;
 
 		String ins = scan();
+		
+		Instruction insClass = createInstruction(label, ins);
+		
+		return insClass;
+	}
+	
+	/*
+	 * Return an instance of a subclass of Instruction
+	 */
+	private Instruction createInstruction(String label, String ins){
+		Integer[] intArray = getIntArray(ins);
 		
 		// Requires all subclasses of Instruction to follow naming convention: OpcodeInstruction
 		String className = ins.substring(0,1).toUpperCase() + ins.substring(1) + "Instruction";
@@ -88,24 +98,9 @@ public class Translator {
 		try {
 			Class<?> instructionClass = Class.forName("sml." + className);
 		
-			switch (ins) {			
-			case "bnz":
-				intArray[0] = scanInt();
-
-				// parse statement to int
-				String l2 = scan();
-				int lnum = Integer.parseInt(l2.substring(1));
-				intArray[1] = lnum;		
-				break;
-			default:
-				intArray[0] = scanInt();
-				intArray[1] = scanInt();
-				intArray[2] = scanInt();
-			}
-
 			Constructor<?> cons = instructionClass.getConstructor(
 					new Class<?>[] {String.class, Integer[].class});
-			Object instruction = cons.newInstance(new Object[]{ins, intArray});
+			Object instruction = cons.newInstance(new Object[]{label, intArray});
 			return (Instruction) instruction;
 			
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | 
@@ -115,6 +110,28 @@ public class Translator {
 		}
 		
 		return null;
+	}
+	
+	/*
+	 * Creates an array of integers from the instruction line
+	 * To be used in the constructors for subclasses of Instruction
+	 */
+	private Integer[] getIntArray(String ins) {
+		Integer[] result = new Integer[3];
+		
+		result[0] = scanInt();
+
+		if (ins.equals("bnz")) {
+			String l2 = scan();
+			int lnum = Integer.parseInt(l2.substring(1));
+			result[1] = lnum;
+		} else {
+			result[1] = scanInt();				
+		}
+		
+		result[2] = scanInt();
+		
+		return result;
 	}
 
 	/*
