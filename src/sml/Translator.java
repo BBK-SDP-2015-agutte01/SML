@@ -16,7 +16,7 @@ public class Translator {
 	// word + line is the part of the current line that's not yet processed
 	// word has no whitespace
 	// If word and line are not empty, line begins with whitespace
-	private String line = "";
+	public String line = "";
 	private Labels labels; // The labels of the program being translated
 	private ArrayList<Instruction> program; // The program to be created
 	private String fileName; // source file of SML code
@@ -103,9 +103,15 @@ public class Translator {
 			Object instruction = cons.newInstance(new Object[]{label, intArray});
 			return (Instruction) instruction;
 			
-		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | 
-				InstantiationException | IllegalAccessException | IllegalArgumentException | 
-				InvocationTargetException e) {
+		} catch (ClassNotFoundException e) {
+			System.err.println("Class could not be created from opcode.");
+		} catch (NoSuchMethodException e) {
+			System.err.println("Method could not be found.");
+		} catch (InstantiationException e) {
+			System.err.println("Class could not be instantiated.");
+		} catch (IllegalArgumentException e) {
+			System.err.println("Inappropriate arguments used.");
+		} catch (SecurityException | IllegalAccessException | InvocationTargetException e) {
 			e.printStackTrace();
 		}
 		
